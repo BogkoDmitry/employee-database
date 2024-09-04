@@ -1,0 +1,26 @@
+version: "3.9"
+
+volumes:
+    employee-db-volume:
+        name: employee-db-volume
+
+services:
+    employee-db:
+        image: postgres:latest
+        container_name: employee-db
+        environment:
+            - POSTGRES_DB=employee-db
+            - POSTGRES_USER=test
+            - POSTGRES_PASSWORD=test
+        ports:
+            - "5401:5432"
+        volumes:
+            - employee-db-volume:/var/lib/postgresql/data
+
+    employee-db-api:
+        build:
+            context: ./EmployeeDatabase
+            dockerfile: Dockerfile
+        container_name: employee-db-api
+        ports:
+            - "5081:80"
