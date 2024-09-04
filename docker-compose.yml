@@ -23,4 +23,4 @@ services:
             dockerfile: Dockerfile
         container_name: employee-db-api
         ports:
-            - "5081:80"
+            - "5081:8080"

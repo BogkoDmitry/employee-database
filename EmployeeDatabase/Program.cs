@@ -1,8 +1,6 @@
 using EmployeeDatabase;
 
-var host = Host.CreateDefaultBuilder(args)
+await Host.CreateDefaultBuilder(args)
     .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>())
-    .Build();
-
-await host.RunAsync();
-
+    .Build()
+    .RunAsync();

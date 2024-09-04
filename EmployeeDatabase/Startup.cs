@@ -1,6 +1,7 @@
 ﻿using EmployeeDatabase.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -21,6 +22,13 @@ namespace EmployeeDatabase
             var connectionString = _configuration.GetConnectionString("DevConnection");
 
             services.AddDbContext<EDBContext>(options => options.UseNpgsql(connectionString));
+
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
+
+            services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(options =>
             {

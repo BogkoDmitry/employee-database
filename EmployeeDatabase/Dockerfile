@@ -1,23 +1,18 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Debug
 WORKDIR /src
-COPY ["EmployeeDatabase.csproj", "/"]
-RUN dotnet restore "./EmployeeDatabase.csproj"
-COPY . .
+COPY ["EmployeeDatabase.csproj", "src/EmployeeDatabase/"]
+RUN dotnet restore "src/EmployeeDatabase/EmployeeDatabase.csproj"
 WORKDIR "/src/EmployeeDatabase"
-RUN dotnet build "./EmployeeDatabase.csproj" -c $BUILD_CONFIGURATION -o /app/build
+COPY . .
+RUN dotnet build "EmployeeDatabase.csproj" -c Debug -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./EmployeeDatabase.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "EmployeeDatabase.csproj" -c Debug -o /app/publish
 
 FROM base AS final
 WORKDIR /app
